@@ -9,6 +9,7 @@
 #import "SecondViewController.h"
 
 @interface SecondViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *count;
 
 @end
 
@@ -17,7 +18,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
 }
-
-
+- (void)viewWillAppear:(BOOL)animated {
+    NSNotificationCenter * notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(updateLabel:) name:@"Stepper Changed" object:nil];
+}
+- (void) updateLabel: (NSNotification *) notification {
+    self.count.text = [[[notification userInfo]valueForKey:@"Stepper Value"]stringValue];
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 @end
